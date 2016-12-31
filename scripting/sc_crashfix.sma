@@ -98,8 +98,9 @@ public ClearMap()
 		fclose(File);
 	}
 	
-	// if toorun, remove the godamn scientist.
-	if(equali(currentmap, "toonrun1"))
+	// if toorun3, Make the scientist gay.
+	// No XP farming!
+	if(equali(currentmap, "toonrun3"))
 	{
 		new iEntCount = entity_count()
 		
