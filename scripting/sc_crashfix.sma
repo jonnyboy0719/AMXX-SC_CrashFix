@@ -28,7 +28,7 @@ public plugin_init()
 public plugin_end() // failsafe in case event 30 doesn't trigger, like server instantly changes map
 {
 	if(!g_bIntermission) // check if event 30 triggered so we don't call it twice
-		DeleteBrokenEnts()
+		DeleteBrokenEnts(true)
 }
 
 //------------------
@@ -38,7 +38,7 @@ public plugin_end() // failsafe in case event 30 doesn't trigger, like server in
 public event_intermission()
 {
 	g_bIntermission = true
-	DeleteBrokenEnts()
+	DeleteBrokenEnts(true)
 }
 
 //------------------
@@ -118,14 +118,14 @@ public ClearMap()
 	}
 	
 	if(FoundMap)
-		DeleteBrokenEnts();
+		DeleteBrokenEnts(false);
 }
 
 //------------------
 //	DeleteBrokenEnts()
 //------------------
 
-public DeleteBrokenEnts()
+public DeleteBrokenEnts(bool:IsEndMap)
 {
 	// do stuff, example:
 	server_print("Removing broken entities...") 
@@ -142,8 +142,10 @@ public DeleteBrokenEnts()
 
 		// Added monster_, incase they decide to fuckup every single line of code.
 		if( equal("func_tank", iclass, 0)
-			|| equal("func_tank_controls", iclass, 0)
-			|| containi("monster_", iclass) != -1)
+			|| equal("func_tank_controls", iclass, 0) )
+			remove_entity( i );
+		
+		if ( containi("monster_", iclass) != -1 && IsEndMap )
 			remove_entity( i );
 	}
 
