@@ -135,7 +135,7 @@ public DeleteBrokenEnts(bool:IsEndMap)
 	for( new i; i < iEntCount; i++ )
 	{
 		if (!pev_valid(i))
-			break;
+			continue;
 
 		new iclass[32];
 		pev(i, pev_classname, iclass, 32);
@@ -143,13 +143,36 @@ public DeleteBrokenEnts(bool:IsEndMap)
 		// Added monster_, incase they decide to fuckup every single line of code.
 		if( equal("func_tank", iclass, 0)
 			|| equal("func_tank_controls", iclass, 0) )
-			remove_entity( i );
+			RemoveEntity( i );
 		
 		if ( containi("monster_", iclass) != -1 && IsEndMap )
-			remove_entity( i );
+			RemoveEntity( i );
 	}
 
 	// if the intermission event is triggered, players can see the scoreboard and chat, so you can send messages
 	if(g_bIntermission)
 		client_print(0, print_chat, "All broken entities removed!")
+}
+
+//------------------
+//	DeleteBrokenEnts()
+//------------------
+
+RemoveEntity(ent)
+{
+	new iclass[32];
+	pev(ent, pev_classname, iclass, 32);
+
+	server_print("Removed ent: %d", ent)
+	server_print("classname: %s", iclass)
+
+	set_pev(ent, pev_rendermode, kRenderTransAlpha);
+	set_pev(ent, pev_renderamt, 0);
+	set_pev(ent, pev_solid, SOLID_NOT);
+
+	// Then, its bye bye.
+	if(ent)
+		remove_entity(ent)
+
+	return 1;
 }
